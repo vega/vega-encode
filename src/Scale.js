@@ -1,5 +1,5 @@
 import {Transform} from 'vega-dataflow';
-import {scale as getScale} from 'vega-scale';
+import {scale as getScale, bandSpace} from 'vega-scale';
 import {error, inherits, isFunction, toSet} from 'vega-util';
 import {interpolate, interpolateRound} from 'd3-interpolate';
 
@@ -103,13 +103,17 @@ function configureRange(scale, _, count) {
     if (type !== 'band' && type !== 'point') {
       error('Only band and point scales support rangeStep.');
     }
+
     // calculate full range based on requested step size and padding
-    // Mirrors https://github.com/d3/d3-scale/blob/master/src/band.js#L23
-    //  step = span / Math.max(1, n - paddingInner + paddingOuter * 2)
+    // Mirrors https://github.com/vega/vega-scale/blob/master/src/band.js#L23
+    //   space = n - paddingInner + paddingOuter * 2;
+    //   step = (stop - start) / (space > 0 ? space : 1);
+    // with an exception that the formula above replaces space with 1 when space is <= 0
+    // to avoid division by zero. Here, we do not have the division by zero problem.
+    // Thus we can set space = 0 to make range = [0,0] to avoid drawing empty ordinal axis.
     var inner = (_.paddingInner != null ? _.paddingInner : _.padding) || 0,
-        outer = (_.paddingOuter != null ? _.paddingOuter : _.padding) || 0,
-        space = count ? Math.max(1, count - inner + outer * 2) : 0;
-    range = [0, _.rangeStep * space];
+        outer = (_.paddingOuter != null ? _.paddingOuter : _.padding) || 0;
+    range = [0, _.rangeStep * bandSpace(count, inner, outer)];
   }
 
   if (range) {
