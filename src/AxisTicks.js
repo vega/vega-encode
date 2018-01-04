@@ -36,8 +36,6 @@ prototype.transform = function(_, pulse) {
       format = _.format || tickFormat(scale, count, _.formatSpecifier),
       values = _.values ? validTicks(scale, _.values, count) : tickValues(scale, count);
 
-      console.log(params)
-
   if (ticks) out.rem = ticks;
 
   ticks = values.map(function(value, i) {
