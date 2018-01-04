@@ -32,10 +32,11 @@ prototype.transform = function(_, pulse) {
   var out = pulse.fork(pulse.NO_SOURCE | pulse.NO_FIELDS),
       ticks = this.value,
       scale = _.scale,
-      // TODO: Change the the true to a value that's a flag in the axis section of the "vega spec"
-      count = _.count == null ? (_.values ? _.values.length : (_.integer == null || !_.integer)?10:((scale.domain()[1] < 10)?scale.domain()[1]:10)) : tickCount(scale, _.count),
+      count = _.count == null ? (_.values ? _.values.length : ()?((scale.domain()[1] < 10)?scale.domain()[1]:10):10) : tickCount(scale, _.count),
       format = _.format || tickFormat(scale, count, _.formatSpecifier),
       values = _.values ? validTicks(scale, _.values, count) : tickValues(scale, count);
+
+      console.log(params)
 
   if (ticks) out.rem = ticks;
 
