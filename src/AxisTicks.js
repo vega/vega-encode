@@ -32,10 +32,11 @@ prototype.transform = function(_, pulse) {
   var out = pulse.fork(pulse.NO_SOURCE | pulse.NO_FIELDS),
       ticks = this.value,
       scale = _.scale,
-      count = _.count == null ? (_.values ? _.values.length : ()?((scale.domain()[1] < 10)?scale.domain()[1]:10):10) : tickCount(scale, _.count),
+      integer = _.integer,
+      count = _.count == null ? (_.values ? _.values.length : 10) : tickCount(scale, _.count),
       format = _.format || tickFormat(scale, count, _.formatSpecifier),
-      values = _.values ? validTicks(scale, _.values, count) : tickValues(scale, count);
-
+      values = _.values ? validTicks(scale, _.values, count) : tickValues(scale, count, integer);
+      
   if (ticks) out.rem = ticks;
 
   ticks = values.map(function(value, i) {

@@ -75,8 +75,8 @@ export function validTicks(scale, ticks, count) {
  * @param {*} [count] - The approximate number of desired ticks.
  * @return {Array<*>} - The generated tick values.
  */
-export function tickValues(scale, count) {
-  return scale.ticks ? scale.ticks(count) : scale.domain();
+export function tickValues(scale, count, integer) {
+  return scale.ticks ? scale.ticks((integer == null || !integer)?count:((scale.domain()[1] < count)?scale.domain()[1]:count)) : scale.domain();
 }
 
 /**
