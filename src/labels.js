@@ -12,7 +12,7 @@ discrete[BinOrdinal] = bin;
 export function labelValues(scale, count, gradient) {
   if (gradient) return scale.domain();
   var values = discrete[scale.type];
-  return values ? values(scale) : tickValues(scale, count);
+  return values ? values(scale) : tickValues(scale, count, null);
 }
 
 function quantize(scale) {
